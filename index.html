@@ -1,0 +1,1399 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Legalizacija Arhitektura – Stručna pomoć za legalizaciju bespravnih građevina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --slate: #1C2B3A;
+    --slate-mid: #2E4057;
+    --slate-light: #4A6080;
+    --bg: #F5F0EA;
+    --bg-dark: #EDE8E1;
+    --amber: #C8873A;
+    --amber-dark: #A96E28;
+    --white: #FFFFFF;
+    --text: #1C2B3A;
+    --text-muted: #5A6E82;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'Source Sans 3', 'Helvetica Neue', sans-serif;
+    --radius: 6px;
+    --shadow: 0 4px 24px rgba(28,43,58,0.10);
+    --shadow-lg: 0 8px 40px rgba(28,43,58,0.16);
+    --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 17px;
+    overflow-x: hidden;
+  }
+
+  /* ── TYPOGRAPHY ── */
+  h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.2; }
+  h1 { font-size: clamp(2rem, 5vw, 3.4rem); font-weight: 700; }
+  h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 600; }
+  h3 { font-size: 1.2rem; font-weight: 600; }
+  p { color: var(--text-muted); }
+  a { color: inherit; text-decoration: none; }
+
+  .section-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .section-title { color: var(--slate); margin-bottom: 1rem; }
+  .section-subtitle { font-size: 1.05rem; max-width: 600px; }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+  section { padding: 6rem 0; scroll-margin-top: 68px; }
+
+  /* ── FADE-IN ANIMATION ── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: none; }
+  .fade-in-delay-1 { transition-delay: 0.1s; }
+  .fade-in-delay-2 { transition-delay: 0.2s; }
+  .fade-in-delay-3 { transition-delay: 0.3s; }
+  .fade-in-delay-4 { transition-delay: 0.4s; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: background var(--transition), color var(--transition), border-color var(--transition), transform 0.2s;
+    letter-spacing: 0.02em;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary {
+    background: var(--amber);
+    color: var(--white);
+    border-color: var(--amber);
+  }
+  .btn-primary:hover { background: var(--amber-dark); border-color: var(--amber-dark); }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border-color: rgba(255,255,255,0.6);
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.12); border-color: var(--white); }
+  .btn-outline-dark {
+    background: transparent;
+    color: var(--slate);
+    border-color: var(--slate);
+  }
+  .btn-outline-dark:hover { background: var(--slate); color: var(--white); }
+
+  /* ══════════════════════════════════════
+     NAVIGATION
+  ══════════════════════════════════════ */
+  #nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+    background: rgba(28,43,58,0.97);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: box-shadow 0.3s;
+  }
+  #nav.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.25); }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 0.6rem;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--white);
+    font-weight: 600;
+  }
+  .nav-logo svg { flex-shrink: 0; }
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,0.78);
+    font-size: 0.9rem;
+    font-weight: 400;
+    transition: color 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta { margin-left: 1rem; }
+  .nav-hamburger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px;
+    background: none; border: none;
+  }
+  .nav-hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--white);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  @media(max-width: 900px) {
+    .nav-links, .nav-cta { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: fixed; top: 68px; left: 0; right: 0;
+      background: var(--slate);
+      padding: 1.5rem 1.5rem 2rem;
+      gap: 1.2rem; align-items: flex-start;
+    }
+    .nav-cta.open { display: block; margin-top: 0.5rem; }
+  }
+
+  /* ══════════════════════════════════════
+     HERO
+  ══════════════════════════════════════ */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    background: var(--slate);
+    position: relative;
+    overflow: hidden;
+    padding: 7rem 0 5rem;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    opacity: 0.07;
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 720px; }
+  .hero-label {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(200,135,58,0.15);
+    border: 1px solid rgba(200,135,58,0.4);
+    color: var(--amber);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.9rem;
+    border-radius: 2rem;
+    margin-bottom: 1.75rem;
+  }
+  #hero h1 { color: var(--white); margin-bottom: 1.25rem; }
+  #hero h1 span { color: var(--amber); }
+  .hero-sub {
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.72);
+    margin-bottom: 2.5rem;
+    max-width: 580px;
+    line-height: 1.65;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 4rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    flex-wrap: wrap;
+  }
+  .hero-stat-num {
+    font-family: var(--font-display);
+    font-size: 2rem; font-weight: 700;
+    color: var(--amber);
+    display: block;
+  }
+  .hero-stat-label {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    margin-top: 0.1rem;
+  }
+
+  /* ══════════════════════════════════════
+     PROBLEM
+  ══════════════════════════════════════ */
+  #problem { background: var(--bg); }
+  .problem-intro {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+    align-items: center; margin-bottom: 4rem;
+  }
+  @media(max-width:768px) { .problem-intro { grid-template-columns:1fr; gap:2rem; } }
+  .problem-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .problem-card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 2rem 1.75rem;
+    box-shadow: var(--shadow);
+    border-left: 3px solid var(--amber);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+  .problem-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .problem-card-icon {
+    width: 44px; height: 44px;
+    background: rgba(200,135,58,0.10);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .problem-card h3 { color: var(--slate); margin-bottom: 0.5rem; }
+  .problem-card p { font-size: 0.93rem; line-height: 1.6; }
+
+  /* ══════════════════════════════════════
+     SERVICES
+  ══════════════════════════════════════ */
+  #services { background: var(--slate); }
+  #services .section-title { color: var(--white); }
+  #services .section-subtitle { color: rgba(255,255,255,0.6); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem; margin-top: 3.5rem;
+  }
+  .service-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 10px;
+    padding: 2.25rem 2rem;
+    transition: background var(--transition), border-color var(--transition), transform var(--transition);
+  }
+  .service-card:hover {
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(200,135,58,0.4);
+    transform: translateY(-4px);
+  }
+  .service-icon {
+    width: 52px; height: 52px;
+    background: rgba(200,135,58,0.15);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.25rem;
+  }
+  .service-card h3 { color: var(--white); margin-bottom: 0.65rem; font-size: 1.05rem; }
+  .service-card p { color: rgba(255,255,255,0.58); font-size: 0.92rem; line-height: 1.6; }
+
+  /* ══════════════════════════════════════
+     PROCESS
+  ══════════════════════════════════════ */
+  #process { background: var(--bg-dark); }
+  .process-steps { margin-top: 3.5rem; position: relative; }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    left: 27px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--amber), rgba(200,135,58,0.1));
+  }
+  @media(min-width:768px) {
+    .process-steps::before { left: 50%; transform: translateX(-50%); }
+  }
+  .process-step {
+    display: flex; gap: 2rem; align-items: flex-start;
+    margin-bottom: 2.5rem; position: relative;
+  }
+  @media(min-width:768px) {
+    .process-step { width: 50%; padding-right: 3rem; }
+    .process-step:nth-child(even) {
+      margin-left: auto;
+      padding-right: 0; padding-left: 3rem;
+      flex-direction: row;
+    }
+    .process-step:nth-child(odd) { flex-direction: row-reverse; text-align: right; }
+    .process-step:nth-child(odd) .step-content { align-items: flex-end; }
+  }
+  @media(max-width:767px) {
+    .process-steps::before { left: 27px; }
+    .process-step { padding-left: 4.5rem; }
+    .step-num { position: absolute; left: 0; }
+  }
+  .step-num {
+    flex-shrink: 0;
+    width: 56px; height: 56px;
+    background: var(--amber);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--white);
+    position: relative; z-index: 1;
+    box-shadow: 0 0 0 6px var(--bg-dark);
+  }
+  @media(min-width:768px) {
+    .step-num { position: absolute; right: -28px; top: 0; }
+    .process-step:nth-child(even) .step-num { right: auto; left: -28px; }
+  }
+  .step-content { display: flex; flex-direction: column; }
+  .step-content h3 { color: var(--slate); margin-bottom: 0.4rem; }
+  .step-content p { font-size: 0.93rem; }
+  .step-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 0.4rem;
+  }
+
+  /* ══════════════════════════════════════
+     WHY US
+  ══════════════════════════════════════ */
+  #why { background: var(--bg); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem; margin-top: 3.5rem;
+  }
+  .why-card {
+    display: flex; flex-direction: column; gap: 1rem;
+    padding: 2rem 1.75rem;
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    transition: transform var(--transition);
+  }
+  .why-card:hover { transform: translateY(-4px); }
+  .why-icon {
+    width: 52px; height: 52px;
+    background: var(--slate);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .why-card h3 { color: var(--slate); font-size: 1.05rem; }
+  .why-card p { font-size: 0.93rem; line-height: 1.6; }
+
+  /* ══════════════════════════════════════
+     FAQ
+  ══════════════════════════════════════ */
+  #faq { background: var(--slate); }
+  #faq .section-title { color: var(--white); }
+  #faq .section-subtitle { color: rgba(255,255,255,0.55); }
+  .faq-list { margin-top: 3rem; display: flex; flex-direction: column; gap: 1px; }
+  .faq-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.25s;
+  }
+  .faq-item.open { border-color: rgba(200,135,58,0.5); }
+  .faq-question {
+    width: 100%;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem;
+    padding: 1.4rem 1.75rem;
+    background: none; border: none; cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 1rem; font-weight: 600;
+    color: var(--white);
+    text-align: left;
+    line-height: 1.4;
+    transition: color 0.2s;
+  }
+  .faq-item.open .faq-question { color: var(--amber); }
+  .faq-icon {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    background: rgba(200,135,58,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--amber); }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+    padding: 0 1.75rem;
+  }
+  .faq-answer-inner {
+    padding-bottom: 1.5rem;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+  .faq-item.open .faq-answer { max-height: 400px; }
+
+  /* ══════════════════════════════════════
+     CONTACT
+  ══════════════════════════════════════ */
+  #contact { background: var(--bg); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 5rem; align-items: start;
+  }
+  @media(max-width:768px) { .contact-grid { grid-template-columns:1fr; gap:3rem; } }
+  .contact-info h2 { margin-bottom: 1rem; }
+  .contact-info p { margin-bottom: 2rem; }
+  .contact-detail {
+    display: flex; align-items: flex-start; gap: 0.75rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+  .contact-detail-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: rgba(200,135,58,0.12);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 1px;
+  }
+  .contact-detail strong { display: block; font-size: 0.8rem; color: var(--amber); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+  .contact-detail span { color: var(--text-muted); }
+  .contact-form {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-lg);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media(max-width:500px) { .form-row { grid-template-columns:1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1.2rem; }
+  .form-group label {
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--slate-light);
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 0.8rem 1rem;
+    border: 1.5px solid #D8D3CC;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 0.97rem;
+    color: var(--text);
+    background: var(--bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--amber);
+    box-shadow: 0 0 0 3px rgba(200,135,58,0.15);
+  }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-note { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; }
+  #form-success {
+    display: none;
+    background: rgba(200,135,58,0.08);
+    border: 1px solid rgba(200,135,58,0.3);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    color: var(--amber-dark);
+    font-weight: 600;
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  /* ══════════════════════════════════════
+     PRIVACY POLICY
+  ══════════════════════════════════════ */
+  #privacy { background: var(--bg-dark); padding: 3.5rem 0; }
+  #privacy h2 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--slate); }
+  #privacy p, #privacy li { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.6rem; line-height: 1.7; }
+  #privacy ul { margin-left: 1.5rem; margin-bottom: 0.8rem; }
+  #privacy h3 { font-size: 1rem; color: var(--slate); margin: 1.25rem 0 0.4rem; }
+
+  /* ══════════════════════════════════════
+     FOOTER
+  ══════════════════════════════════════ */
+  footer {
+    background: var(--slate);
+    padding: 2.5rem 0;
+    text-align: center;
+  }
+  .footer-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    color: var(--white); font-size: 1rem; font-weight: 600;
+  }
+  .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .footer-links a { color: rgba(255,255,255,0.5); font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { color: rgba(255,255,255,0.35); font-size: 0.8rem; width: 100%; margin-top: 1rem; }
+
+  /* ══════════════════════════════════════
+     COOKIE BANNER
+  ══════════════════════════════════════ */
+  #cookie-banner {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+    background: var(--slate);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 1.5rem 1.5rem;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.25);
+    transform: translateY(100%);
+    transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  #cookie-banner.show { transform: translateY(0); }
+  .cookie-inner {
+    max-width: 1140px; margin: 0 auto;
+    display: flex; align-items: flex-start; gap: 2rem;
+    flex-wrap: wrap;
+  }
+  .cookie-text { flex: 1; min-width: 260px; }
+  .cookie-text p { color: rgba(255,255,255,0.72); font-size: 0.88rem; line-height: 1.6; }
+  .cookie-text a { color: var(--amber); text-decoration: underline; }
+  .cookie-btns { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; flex-shrink: 0; }
+  .cookie-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius);
+    font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; border: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .cookie-btn:hover { transform: translateY(-1px); }
+  .cookie-btn-primary { background: var(--amber); color: var(--white); }
+  .cookie-btn-primary:hover { background: var(--amber-dark); }
+  .cookie-btn-secondary { background: rgba(255,255,255,0.1); color: var(--white); }
+  .cookie-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+  .cookie-btn-settings { background: none; color: rgba(255,255,255,0.55); text-decoration: underline; }
+
+  /* ── COOKIE MODAL ── */
+  #cookie-modal {
+    display: none;
+    position: fixed; inset: 0; z-index: 10000;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+    padding: 1.5rem;
+  }
+  #cookie-modal.open { display: flex; }
+  .cookie-modal-box {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 2.5rem;
+    max-width: 480px; width: 100%;
+    box-shadow: var(--shadow-lg);
+  }
+  .cookie-modal-box h3 {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--slate);
+    margin-bottom: 0.5rem;
+  }
+  .cookie-modal-box > p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 1.75rem;
+  }
+  .cookie-toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--bg-dark);
+  }
+  .cookie-toggle-row:last-of-type { border-bottom: none; }
+  .toggle-label strong { display: block; font-size: 0.95rem; color: var(--slate); font-weight: 600; }
+  .toggle-label span { font-size: 0.82rem; color: var(--text-muted); }
+  .toggle {
+    position: relative; width: 44px; height: 24px;
+    flex-shrink: 0;
+  }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider {
+    position: absolute; inset: 0;
+    background: #D8D3CC;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    left: 3px; top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+  }
+  .toggle input:checked + .toggle-slider { background: var(--amber); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
+  .toggle input:disabled + .toggle-slider { background: #A0ADB8; cursor: not-allowed; opacity: 0.7; }
+  .cookie-modal-actions { margin-top: 1.75rem; display: flex; justify-content: flex-end; }
+
+  /* ══════════════════════════════════════
+     SVG HERO BACKGROUND
+  ══════════════════════════════════════ */
+  @keyframes floatBlueprint { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  .hero-blueprint { animation: floatBlueprint 8s ease-in-out infinite; transform-origin: center; }
+
+  /* ══════════════════════════════════════
+     RESPONSIVE MISC
+  ══════════════════════════════════════ */
+  @media(max-width:600px) {
+    section { padding: 4rem 0; }
+    .hero-stats { gap: 1.5rem; }
+    .contact-form { padding: 1.75rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════ -->
+<nav id="nav">
+  <div class="container nav-inner">
+    <a class="nav-logo" href="#hero">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="rgba(200,135,58,0.2)"/>
+        <path d="M6 22L14 6L22 22" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M9 17H19" stroke="#C8873A" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      arh-legal<span style="color:var(--amber);">.</span>hr
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#services">Usluge</a></li>
+      <li><a href="#process">Postupak</a></li>
+      <li><a href="#why">Zašto mi</a></li>
+      <li><a href="#faq">Pitanja</a></li>
+    </ul>
+    <a class="btn btn-primary nav-cta" href="#contact" id="navCta">Kontaktirajte nas</a>
+    <button class="nav-hamburger" id="hamburger" aria-label="Izbornik" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero">
+  <!-- Architectural blueprint SVG background -->
+  <svg class="hero-bg" viewBox="0 0 1200 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <g class="hero-blueprint" fill="none" stroke="white" stroke-width="0.8" opacity="0.8">
+      <!-- Grid -->
+      <line x1="0" y1="100" x2="1200" y2="100"/><line x1="0" y1="200" x2="1200" y2="200"/>
+      <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="400" x2="1200" y2="400"/>
+      <line x1="0" y1="500" x2="1200" y2="500"/><line x1="0" y1="600" x2="1200" y2="600"/>
+      <line x1="100" y1="0" x2="100" y2="700"/><line x1="200" y1="0" x2="200" y2="700"/>
+      <line x1="300" y1="0" x2="300" y2="700"/><line x1="400" y1="0" x2="400" y2="700"/>
+      <line x1="500" y1="0" x2="500" y2="700"/><line x1="600" y1="0" x2="600" y2="700"/>
+      <line x1="700" y1="0" x2="700" y2="700"/><line x1="800" y1="0" x2="800" y2="700"/>
+      <line x1="900" y1="0" x2="900" y2="700"/><line x1="1000" y1="0" x2="1000" y2="700"/>
+      <line x1="1100" y1="0" x2="1100" y2="700"/>
+      <!-- House outline -->
+      <polyline points="620,560 620,380 700,310 780,380 780,560" stroke-width="2"/>
+      <line x1="620" y1="560" x2="780" y2="560" stroke-width="2"/>
+      <rect x="680" y="470" width="40" height="90" stroke-width="1.5"/>
+      <rect x="630" y="415" width="35" height="35" stroke-width="1.5"/>
+      <rect x="715" y="415" width="35" height="35" stroke-width="1.5"/>
+      <!-- Dimension lines -->
+      <line x1="600" y1="380" x2="600" y2="560" stroke-dasharray="4,4"/>
+      <line x1="594" y1="380" x2="606" y2="380"/><line x1="594" y1="560" x2="606" y2="560"/>
+      <line x1="620" y1="575" x2="780" y2="575" stroke-dasharray="4,4"/>
+      <line x1="620" y1="569" x2="620" y2="581"/><line x1="780" y1="569" x2="780" y2="581"/>
+      <!-- Compass -->
+      <circle cx="950" cy="200" r="40" stroke-width="1.5"/>
+      <line x1="950" y1="165" x2="950" y2="175"/><line x1="950" y1="225" x2="950" y2="235"/>
+      <line x1="915" y1="200" x2="925" y2="200"/><line x1="975" y1="200" x2="985" y2="200"/>
+      <polygon points="950,168 943,195 957,195" stroke-width="1" fill="rgba(200,135,58,0.4)" stroke="rgba(200,135,58,0.9)"/>
+      <!-- Plot boundary -->
+      <polygon points="550,600 850,600 900,420 820,310 680,300 560,380" stroke-dasharray="8,4" stroke-width="1.5"/>
+      <!-- Measurements text-placeholders -->
+      <line x1="200" y1="150" x2="380" y2="150" stroke-width="1"/>
+      <line x1="200" y1="145" x2="200" y2="155"/><line x1="380" y1="145" x2="380" y2="155"/>
+      <line x1="150" y1="200" x2="150" y2="420" stroke-width="1"/>
+      <line x1="145" y1="200" x2="155" y2="200"/><line x1="145" y1="420" x2="155" y2="420"/>
+    </g>
+  </svg>
+
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-label fade-in">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#C8873A" stroke-width="1.5"/><path d="M7 4v4M7 10h.01" stroke="#C8873A" stroke-width="1.5" stroke-linecap="round"/></svg>
+        ZPNIZG – Zakon o postupanju s nezakonito izgrađenim zgradama
+      </div>
+      <h1 class="fade-in fade-in-delay-1">
+        Vaša bespravna građevina<br>može dobiti <span>sve papire.</span><br>Mi znamo kako.
+      </h1>
+      <p class="hero-sub fade-in fade-in-delay-2">
+        Vodimo vas kroz cjelokupan postupak legalizacije — od procjene isplativosti do pravomoćnog rješenja — bez birokracije i stresa.
+      </p>
+      <div class="hero-btns fade-in fade-in-delay-3">
+        <a href="#contact" class="btn btn-primary">Zatražite besplatne konzultacije</a>
+        <a href="#process" class="btn btn-outline">Saznajte više o postupku</a>
+      </div>
+      <div class="hero-stats fade-in fade-in-delay-4">
+        <div>
+          <span class="hero-stat-num">200+</span>
+          <span class="hero-stat-label">Uspješno ostvarenih projekata</span>
+        </div>
+        <div>
+          <span class="hero-stat-num">15+</span>
+          <span class="hero-stat-label">Godina iskustva u struci</span>
+        </div>
+        <div>
+          <span class="hero-stat-num">98%</span>
+          <span class="hero-stat-label">Uspješnost predmeta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PROBLEM
+══════════════════════════════════════ -->
+<section id="problem">
+  <div class="container">
+    <div class="problem-intro">
+      <div class="fade-in">
+        <span class="section-label">Prepoznajemo vaš problem</span>
+        <h2 class="section-title">Bespravna gradnja nije vaš kraj — ali neznanje može biti</h2>
+      </div>
+      <div class="fade-in fade-in-delay-1">
+        <p class="section-subtitle">Tisuće vlasnika nekretnina u Hrvatskoj suočavaju se s istom situacijom: zgrada postoji, ali papiri ne postoje — ili nisu uredni. Posljedice mogu biti ozbiljne.</p>
+        <p style="margin-top:1rem;font-size:0.93rem;">Dobra vijest: zakonodavni okvir postoji upravo za takve situacije, a rok nije zauvijek zatvoren. Uz pravo stručno vodstvo, legalizacija je ostvariva za veliku većinu objekata.</p>
+      </div>
+    </div>
+    <div class="problem-cards">
+      <div class="problem-card fade-in">
+        <div class="problem-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Pravna nesigurnost</h3>
+        <p>Ne znate točno koji zakoni se primjenjuju na vaš slučaj niti koji su rokovi. Svaki korak čini se kao zamka.</p>
+      </div>
+      <div class="problem-card fade-in fade-in-delay-1">
+        <div class="problem-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><path d="M8 15h.01M12 15h.01M16 15h.01"/></svg>
+        </div>
+        <h3>Neproduktivnost nekretnine</h3>
+        <p>Bez urednih papira ne možete prodati, naslijediti, iznajmiti ni staviti nekretninu pod hipoteku za kredit.</p>
+      </div>
+      <div class="problem-card fade-in fade-in-delay-2">
+        <div class="problem-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Prijetnja kaznom ili rušenjem</h3>
+        <p>Inspekcija može naložiti uklanjanje objekta. Novčane kazne za bespravnu gradnju mogu biti značajne.</p>
+      </div>
+      <div class="problem-card fade-in fade-in-delay-3">
+        <div class="problem-card-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Birokratski labirint</h3>
+        <p>Ured za katastar, općina, ministarstvo — svaka institucija traži drugačije obrasce i dokumente, a nitko vam ne kaže cjelovit put.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     SERVICES
+══════════════════════════════════════ -->
+<section id="services">
+  <div class="container">
+    <div class="fade-in" style="text-align:center;max-width:640px;margin:0 auto;">
+      <span class="section-label">Naše usluge</span>
+      <h2 class="section-title">Sve što trebate za uspješnu legalizaciju</h2>
+      <p class="section-subtitle" style="color:rgba(255,255,255,0.6);">Od prve konzultacije do pravomoćnog rješenja — cijeli put prolazimo zajedno.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-in fade-in-delay-1">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h3>Procjena isplativosti legalizacije</h3>
+        <p>Analiza vaše situacije na terenu i uvid u prostorne planove — jasno vam kažemo što je moguće i koliko bi vas cijeli postupak koštao, bez skrivenih troškova.</p>
+      </div>
+      <div class="service-card fade-in fade-in-delay-2">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <h3>Izrada geodetskog elaborata i tehničke dokumentacije</h3>
+        <p>Pripremamo svu potrebnu projektnu i geodetsku dokumentaciju u suradnji s ovlaštenim geometrima i projektantima, prema važećim propisima.</p>
+      </div>
+      <div class="service-card fade-in fade-in-delay-3">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h3>Zastupanje pred nadležnim tijelima</h3>
+        <p>U vaše ime komuniciramo s gradskim uredima, ministarstvima i inspekcijama. Vi ne morate dolaziti na šaltere — mi vas zastupamo od početka do kraja.</p>
+      </div>
+      <div class="service-card fade-in fade-in-delay-4">
+        <div class="service-icon">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <h3>Praćenje predmeta do pravomoćnosti rješenja</h3>
+        <p>Nadziremo svaki korak postupka i redovito vas informiramo o statusu predmeta. Naš posao nije gotov dok rješenje ne postane pravomoćno i upisano.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PROCESS
+══════════════════════════════════════ -->
+<section id="process">
+  <div class="container">
+    <div class="fade-in" style="text-align:center;max-width:600px;margin:0 auto;">
+      <span class="section-label">Postupak korak po korak</span>
+      <h2 class="section-title">Jasni koraci, predvidljiv ishod</h2>
+      <p class="section-subtitle">Legalizacija ne mora biti kaos. Naš provjereni proces osigurava da ništa ne ostane zaboravljeno.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step fade-in">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <span class="step-tag">Korak 1</span>
+          <h3>Besplatne konzultacije i procjena</h3>
+          <p>Razgovaramo o vašoj situaciji, obiđemo objekt, pregledamo prostorne planove i dajemo vam realnu sliku mogućnosti i troškova — bez naknade.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in fade-in-delay-1">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <span class="step-tag">Korak 2</span>
+          <h3>Prikupljanje dokumentacije</h3>
+          <p>Pribavljamo potrebne izvode iz katastra, zemljišnih knjiga, prostornog plana i ostalu administrativnu dokumentaciju o čijem prikupljanju brinemo mi.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in fade-in-delay-2">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <span class="step-tag">Korak 3</span>
+          <h3>Izrada elaborata i zahtjeva</h3>
+          <p>Ovlašteni projektant izrađuje propisanu tehničku dokumentaciju, a mi sastavljamo kompletan zahtjev za legalizaciju prema uvjetima nadležnog tijela.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in fade-in-delay-3">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <span class="step-tag">Korak 4</span>
+          <h3>Podnošenje zahtjeva i upravni postupak</h3>
+          <p>Predajemo zahtjev i zastupamo vaše interese kroz cjelokupni upravni postupak — pratimo rokove, odgovaramo na zahtjeve tijela i rješavamo potencijalne prepreke.</p>
+        </div>
+      </div>
+      <div class="process-step fade-in fade-in-delay-4">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <span class="step-tag">Korak 5</span>
+          <h3>Pravomoćno rješenje — legalizacija završena</h3>
+          <p>Rješenje postaje pravomoćno i objekt se upisuje u katastarski i gruntovni registar. Vaša nekretnina sada ima sve potrebne papire.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     WHY US
+══════════════════════════════════════ -->
+<section id="why">
+  <div class="container">
+    <div class="fade-in" style="max-width:600px;">
+      <span class="section-label">Zašto odabrati nas</span>
+      <h2 class="section-title">Iskustvo koje govori kroz rezultate</h2>
+      <p class="section-subtitle">Ne obećavamo čuda — obećavamo stručnost, transparentnost i predanost vašem predmetu.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card fade-in fade-in-delay-1">
+        <div class="why-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <h3>Više od 200 uspješno ostvarenih projekata</h3>
+        <p>Svaki predmet je jedinstven, ali naše iskustvo iz stotina postupaka znači da smo susreli gotovo svaki mogući scenarij — i pronašli rješenje.</p>
+      </div>
+      <div class="why-card fade-in fade-in-delay-2">
+        <div class="why-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>Iskustvo u PGŽ, Dalmaciji i kontinentalnoj Hrvatskoj</h3>
+        <p>Poznajemo posebnosti lokalnih prostornih planova i načine rada nadležnih tijela u različitim regijama — to je razlika koja se broji.</p>
+      </div>
+      <div class="why-card fade-in fade-in-delay-3">
+        <div class="why-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </div>
+        <h3>Osobni pristup svakom predmetu</h3>
+        <p>Niste broj u redu. Svaki klijent dobiva dedicirani tim i direktnu liniju komunikacije. Uvijek znate gdje je vaš predmet i što se događa.</p>
+      </div>
+      <div class="why-card fade-in fade-in-delay-4">
+        <div class="why-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h3>Potpuno zastupanje — vi samo potpišete</h3>
+        <p>Od prikupljanja dokumentacije do predaje zahtjeva i praćenja predmeta, sve radimo umjesto vas. Vaš doprinos svodimo na minimum.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FAQ
+══════════════════════════════════════ -->
+<section id="faq">
+  <div class="container">
+    <div class="fade-in" style="text-align:center;max-width:600px;margin:0 auto 3rem;">
+      <span class="section-label">Česta pitanja</span>
+      <h2 class="section-title">Odgovori koje tražite</h2>
+      <p class="section-subtitle" style="color:rgba(255,255,255,0.55);">Pisana iz perspektive naših klijenata — jer ista pitanja postavljaju gotovo svi koji nas kontaktiraju po prvi put.</p>
+    </div>
+    <div class="faq-list fade-in">
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Jesam li prekasno? Je li rok za legalizaciju još uvijek otvoren?
+          <span class="faq-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          </span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            Postupci legalizacije prema ZPNIZG-u i dalje su mogući za objekte izgrađene do određenih datuma propisanih zakonom. Rokovi za podnošenje zahtjeva ovisni su o specifičnoj kategoriji objekta i pojedinim odredbama zakona koji se mogu mijenjati. Ono što je važno: što ranije pokrenete postupak, to ste sigurniji. Mnogi naši klijenti mislili su da su zakasnili — a nismo imali slučaj koji se nije mogao riješiti. Kontaktirajte nas za konkretnu procjenu vaše situacije.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Koliko košta cijeli postupak?
+          <span class="faq-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          </span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            Ukupan trošak ovisi o vrsti, veličini i kategoriji objekta, lokaciji i složenosti predmeta. Sastoji se od komunalnog doprinosa (koji plaćate državi), troškova izrade dokumentacije i naše naknade za zastupanje. Na prvoj konzultaciji, koja je besplatna, dajemo vam transparentan pregled svih predvidljivih troškova bez iznenađenja. Za orijentaciju: legalizacija jednostavnog objekta do 100 m² kreće se od nekoliko tisuća eura, a veći ili kompleksniji predmeti mogu biti viši.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Što ako moja građevina nije evidentirana na katastru?
+          <span class="faq-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          </span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            To je čest slučaj i nije prepreka za legalizaciju. U sklopu postupka, ovlašteni geometar izrađuje geodetski elaborat kojim se objekt prvi put upisuje u katastar — to je integralni dio procesa koji mi koordiniramo. Naprosto je jedan korak više, koji organiziramo u vaše ime.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Mogu li legalizirati i ako nemam građevinsku dozvolu?
+          <span class="faq-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          </span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            Da — upravo to je svrha zakona o legalizaciji. Postupak je osmišljen za objekte koji su izgrađeni bez građevinske dozvole ili bez suglasnosti s izdanom dozvolom. Ključno je da objekt ispunjava prostorno-planske uvjete lokacije i određene tehničke standarde. Nemogućnost legalizacije rjeđa je iznimka nego pravilo, a procjenu vašeg slučaja radimo već na prvom sastanku.
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Koliko dugo traje postupak?
+          <span class="faq-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          </span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            Za jednostavnije objekte i ažurna tijela, postupak može biti gotov za 3 do 6 mjeseci. Složeniji predmeti ili gužve u određenim uredima mogu trajati i do godinu do dvije. Budemo realni s vama od samog početka o očekivanom vremenskom okviru za vaš specifični slučaj. Naš zadatak je aktivno pratiti predmet i ne dopustiti da "stoji u ladici".
+          </div>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Što se dogodi ako ne legaliziram?
+          <span class="faq-icon">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="7" y1="2" x2="7" y2="12"/><line x1="2" y1="7" x2="12" y2="7"/></svg>
+          </span>
+        </button>
+        <div class="faq-answer" role="region">
+          <div class="faq-answer-inner">
+            Posljedice nelegalizacije su konkretne: ne možete prodati nekretninu, ne možete je koristiti kao kolateral za kredit, nasljeđivanje je otežano, a inspekcija može naložiti uklanjanje objekta uz visoke kazne. Uz to, vrijednost nekretnine bez urednih papira znatno je niža. Legalizacija je investicija koja se višestruko isplati — i financijski i pravno.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="fade-in">
+        <span class="section-label">Kontakt</span>
+        <h2 class="section-title">Napravite prvi korak danas</h2>
+        <p>Besplatna konzultacija ne obvezuje ni na što. Ispričajte nam svoju situaciju i mi ćemo vam reći što je moguće i kako bismo vam pomogli.</p>
+        <div style="margin-top:2rem;display:flex;flex-direction:column;gap:0.75rem;">
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.06-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2z"/></svg>
+            </div>
+            <div><strong>Telefon</strong><span>+385 51 000 000</span></div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div><strong>E-mail</strong><span>info@legalizacija.hr</span></div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div><strong>Adresa</strong><span>Ulica primjer 10, 51000 Rijeka</span></div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8873A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div><strong>Radno vrijeme</strong><span>Pon – Pet: 8:00 – 16:00</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form fade-in fade-in-delay-1">
+        <h3 style="font-family:var(--font-display);font-size:1.3rem;color:var(--slate);margin-bottom:0.4rem;">Pošaljite upit</h3>
+        <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1.75rem;">Odgovaramo unutar 24 sata.</p>
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="ime">Ime i prezime *</label>
+              <input type="text" id="ime" name="ime" placeholder="Ana Horvat" required>
+            </div>
+            <div class="form-group">
+              <label for="telefon">Telefon *</label>
+              <input type="tel" id="telefon" name="telefon" placeholder="+385 91 000 0000" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email">E-mail adresa *</label>
+            <input type="email" id="email" name="email" placeholder="ana.horvat@gmail.com" required>
+          </div>
+          <div class="form-group">
+            <label for="lokacija">Lokacija objekta</label>
+            <input type="text" id="lokacija" name="lokacija" placeholder="npr. Krk, Makarska, Zagreb…">
+          </div>
+          <div class="form-group">
+            <label for="opis">Kratki opis situacije *</label>
+            <textarea id="opis" name="opis" placeholder="Opišite ukratko što imate: npr. kuća 120 m², izgrađena 1990-ih, nema građevinsku dozvolu, nije upisana u katastar…" required></textarea>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:0.6rem;margin-bottom:1.5rem;">
+            <input type="checkbox" id="suglasnost" name="suglasnost" required style="margin-top:3px;accent-color:var(--amber);width:16px;height:16px;flex-shrink:0;">
+            <label for="suglasnost" style="font-size:0.82rem;color:var(--text-muted);cursor:pointer;">Suglasan/na sam s <a href="#privacy" style="color:var(--amber);text-decoration:underline;">Politikom privatnosti</a> i obradom osobnih podataka u svrhu odgovora na upit.</label>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;font-size:1rem;padding:1rem;">
+            Pošalji upit &rarr;
+          </button>
+          <div id="form-success">
+            Hvala! Vaš upit je primljen. Javit ćemo se unutar 24 sata.
+          </div>
+          <p class="form-note" style="margin-top:1rem;">* Obvezna polja. Vaše podatke koristimo isključivo za odgovor na upit.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     PRIVACY POLICY
+══════════════════════════════════════ -->
+<section id="privacy">
+  <div class="container" style="max-width:800px;">
+    <h2>Politika privatnosti</h2>
+    <p>Datum zadnje izmjene: lipanj 2026.</p>
+
+    <h3>Tko smo</h3>
+    <p>Legalizacija.hr je ured za arhitekturu i legalizaciju nekretnina sa sjedištem na adresi Ulica primjer 10, 51000 Rijeka, Hrvatska (OIB: 00000000000). Voditelj obrade osobnih podataka u smislu GDPR-a je Legalizacija d.o.o.</p>
+
+    <h3>Koje podatke prikupljamo</h3>
+    <p>Putem kontaktnog obrasca prikupljamo: ime i prezime, telefonski broj, e-mail adresu i sadržaj upita koji nam dobrovoljno dostavite. Dodatno, posjeti stranici mogu generirati standardne tehničke zapise (IP adresa, vrsta preglednika) u svrhu sigurnosti i statistike.</p>
+
+    <h3>Kako koristimo podatke</h3>
+    <ul>
+      <li>Za odgovor na vaš upit i pružanje tražene usluge</li>
+      <li>Za slanje informacija vezanih uz vaš predmet (samo uz vašu suglasnost)</li>
+      <li>Za poboljšanje naše web stranice (anonimna analitika, uz vašu suglasnost)</li>
+    </ul>
+
+    <h3>Kolačići (cookies)</h3>
+    <p>Nužni kolačići osiguravaju ispravno funkcioniranje stranice (pamćenje vaše suglasnosti, sesija obrasca). Analitičke i marketinške kolačiće postavljamo samo uz vašu izričitu suglasnost, kojom upravljate putem bannera pri dnu stranice.</p>
+
+    <h3>Rok čuvanja podataka</h3>
+    <p>Osobne podatke iz kontaktnih obrazaca čuvamo najdulje 2 godine, ili do vašeg zahtjeva za brisanjem.</p>
+
+    <h3>Vaša prava</h3>
+    <p>Imate pravo na pristup, ispravak, brisanje, prijenos i ograničenje obrade vaših osobnih podataka. Zahtjev možete uputiti na: <strong>info@legalizacija.hr</strong>. Imate i pravo na prigovor Agenciji za zaštitu osobnih podataka (AZOP).</p>
+
+    <h3>Kontakt za zaštitu podataka</h3>
+    <p>Za sva pitanja vezana uz zaštitu privatnosti pišite na: info@legalizacija.hr</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div class="container footer-inner">
+    <div class="footer-logo">arh-legal<span style="color:var(--amber);">.</span>hr</div>
+    <div class="footer-links">
+      <a href="#services">Usluge</a>
+      <a href="#process">Postupak</a>
+      <a href="#faq">Pitanja</a>
+      <a href="#contact">Kontakt</a>
+      <a href="#privacy">Politika privatnosti</a>
+    </div>
+    <div class="footer-copy">
+      &copy; 2026 Legalizacija.hr · Sva prava pridržana · Ovlašteni arhitekti i stručnjaci za legalizaciju
+    </div>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════
+     COOKIE BANNER
+══════════════════════════════════════ -->
+<div id="cookie-banner" role="banner" aria-label="Suglasnost za kolačiće">
+  <div class="cookie-inner">
+    <div class="cookie-text">
+      <p>Ova stranica koristi kolačiće kako bi vam pružila bolje korisničko iskustvo. Korištenjem stranice pristajete na upotrebu nužnih kolačića. Možete prihvatiti i analitičke kolačiće ili prilagoditi postavke. Više u našoj <a href="#privacy">Politici privatnosti</a>.</p>
+    </div>
+    <div class="cookie-btns">
+      <button class="cookie-btn cookie-btn-primary" id="cookieAcceptAll">Prihvati sve</button>
+      <button class="cookie-btn cookie-btn-secondary" id="cookieNecessary">Samo nužni</button>
+      <button class="cookie-btn cookie-btn-settings" id="cookieSettings">Postavke kolačića</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     COOKIE MODAL
+══════════════════════════════════════ -->
+<div id="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle">
+  <div class="cookie-modal-box">
+    <h3 id="cookieModalTitle">Postavke kolačića</h3>
+    <p>Upravljajte vrstama kolačića koje prihvaćate. Nužni kolačići uvijek su aktivni jer su potrebni za funkcioniranje stranice.</p>
+    <div class="cookie-toggle-row">
+      <div class="toggle-label">
+        <strong>Nužni kolačići</strong>
+        <span>Potrebni za rad stranice, ne mogu se isključiti.</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" checked disabled>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="cookie-toggle-row">
+      <div class="toggle-label">
+        <strong>Analitički kolačići</strong>
+        <span>Pomažu nam razumjeti kako koristite stranicu (anonimni podaci).</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="toggleAnalytics">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="cookie-toggle-row">
+      <div class="toggle-label">
+        <strong>Marketinški kolačići</strong>
+        <span>Koriste se za prikazivanje relevantnih oglasa.</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="toggleMarketing">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+    <div class="cookie-modal-actions">
+      <button class="btn btn-primary" id="cookieSaveSettings">Spremi postavke</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════ -->
+<script>
+(function() {
+  'use strict';
+
+  /* ── NAVIGATION ── */
+  const nav = document.getElementById('nav');
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  const navCta = document.getElementById('navCta');
+
+  window.addEventListener('scroll', function() {
+    nav.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  hamburger.addEventListener('click', function() {
+    const open = navLinks.classList.toggle('open');
+    navCta.classList.toggle('open', open);
+    hamburger.setAttribute('aria-expanded', open);
+  });
+
+  // Smooth scroll for all same-page anchor links
+  function smoothScrollTo(targetId) {
+    var target = document.getElementById(targetId);
+    if (!target) return;
+    var navHeight = document.getElementById('nav').offsetHeight;
+    var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+    window.scrollTo({ top: top, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      var hash = a.getAttribute('href').slice(1);
+      if (!hash) return;
+      var target = document.getElementById(hash);
+      if (!target) return;
+      e.preventDefault();
+      // Close mobile menu if open
+      navLinks.classList.remove('open');
+      navCta.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      smoothScrollTo(hash);
+      history.pushState(null, null, '#' + hash);
+    });
+  });
+
+  /* ── FADE-IN OBSERVER ── */
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(function(el) {
+    observer.observe(el);
+  });
+
+  /* ── FAQ ACCORDION ── */
+  document.querySelectorAll('.faq-question').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = btn.closest('.faq-item');
+      var isOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item.open').forEach(function(i) {
+        i.classList.remove('open');
+        i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  /* ── CONTACT FORM ── */
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var form = e.target;
+    var valid = true;
+    form.querySelectorAll('[required]').forEach(function(field) {
+      if (!field.value.trim() || (field.type === 'checkbox' && !field.checked)) {
+        field.style.borderColor = '#E05252';
+        valid = false;
+      } else {
+        field.style.borderColor = '';
+      }
+    });
+    if (!valid) return;
+    var btn = form.querySelector('button[type="submit"]');
+    btn.textContent = 'Šalje se…';
+    btn.disabled = true;
+    setTimeout(function() {
+      document.getElementById('form-success').style.display = 'block';
+      form.reset();
+      btn.textContent = 'Pošalji upit →';
+      btn.disabled = false;
+    }, 1200);
+  });
+
+  /* ── COOKIE CONSENT ── */
+  var COOKIE_KEY = 'legalizacija_cookie_consent';
+  var banner = document.getElementById('cookie-banner');
+  var modal = document.getElementById('cookie-modal');
+
+  function saveCookieChoice(analytics, marketing) {
+    localStorage.setItem(COOKIE_KEY, JSON.stringify({
+      necessary: true,
+      analytics: !!analytics,
+      marketing: !!marketing,
+      ts: Date.now()
+    }));
+    hideBanner();
+  }
+
+  function hideBanner() {
+    banner.classList.remove('show');
+    modal.classList.remove('open');
+  }
+
+  function showBanner() {
+    setTimeout(function() { banner.classList.add('show'); }, 800);
+  }
+
+  if (!localStorage.getItem(COOKIE_KEY)) {
+    showBanner();
+  }
+
+  document.getElementById('cookieAcceptAll').addEventListener('click', function() {
+    saveCookieChoice(true, true);
+  });
+
+  document.getElementById('cookieNecessary').addEventListener('click', function() {
+    saveCookieChoice(false, false);
+  });
+
+  document.getElementById('cookieSettings').addEventListener('click', function() {
+    modal.classList.add('open');
+  });
+
+  document.getElementById('cookieSaveSettings').addEventListener('click', function() {
+    var analytics = document.getElementById('toggleAnalytics').checked;
+    var marketing = document.getElementById('toggleMarketing').checked;
+    saveCookieChoice(analytics, marketing);
+  });
+
+  // Close modal on backdrop click
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) modal.classList.remove('open');
+  });
+
+  // Close modal on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') modal.classList.remove('open');
+  });
+
+})();
+</script>
+</body>
+</html>
